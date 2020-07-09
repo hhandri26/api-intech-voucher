@@ -4,6 +4,7 @@ module.exports = function(app) {
     var users = require('../controller/user');
     var upload_file = require('../controller/upload_file');
     var payment = require('../controller/transaction');
+    var paymentdetail = require('../controller/transaction_detail');
     var voucher = require('../controller/get_voucher');
 
 
@@ -48,9 +49,35 @@ module.exports = function(app) {
     
     app.route('/payment')
     .post(payment.createTransaction);
+
     app.route('/payment/:id')
     .get(payment.findTransaction);
+
     app.route('/payment/upload')
     .post(payment.uploadTransaction);
+
+    app.route('/payment/approved')
+    .post(payment.approveTransaction);
+
+    app.route('/payment_all')
+    .get(payment.transaction);
+
+    app.route('/voucher/list')
+    .post(voucher.voucher);
+
+    app.route('/voucher/tag')
+    .post(voucher.voucherTag);
+
+    // detail
+    app.route('/payment/detail')
+    .post(paymentdetail.createTransactionDetail);
+
+    app.route('/voucher_done/:id')
+    .get(paymentdetail.voucher);
+
+    app.route('/voucher_all')
+    .get(paymentdetail.voucherAll);
+
+
 
 };

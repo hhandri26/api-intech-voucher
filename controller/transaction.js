@@ -51,6 +51,7 @@ exports.transaction = function(req, res) {
         }
     });
 };
+
 exports.findTransaction = function(req, res) {
     
     var id = req.params.id;
@@ -87,22 +88,21 @@ exports.createTransaction = function(req, res) {
 };
 
 exports.approveTransaction = function(req, res) {
-    
+    var datetime            = new Date();
     var id              = req.body.id;
     var user_approved   = req.body.user_approved;
-    var status          = 'DONE';
+    var status          = req.body.status;
     var updated_at      = datetime.toISOString().slice(0,10);
 
-    var data = connection.query('UPDATE tbl_transaction_header SET user_approved = ?, status = ?,updated_at = ? WHERE id = ?',
-    [ user_approved, status, updated_at,id]);
-    
-    // function (error, rows, fields){
-    //     if(error){
-    //         console.log(error)
-    //     } else{
-    //         response.ok("Approval berhasil!", res)
-    //     }
-    // });
+    connection.query('UPDATE tbl_transaction_header SET user_approved = ?, status = ?,updated_at = ? WHERE id = ?',
+    [ user_approved, status, updated_at,id], 
+    function (error, rows, fields){
+        if(error){
+            console.log(error)
+        } else{
+            response.ok("Approval berhasil!", res)
+        }
+    });
 };
 
 exports.uploadTransaction = function(req, res) {
