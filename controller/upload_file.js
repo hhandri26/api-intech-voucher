@@ -27,7 +27,7 @@ exports.index = function(req, res) {
             return {
                 mediaName: file.filename,
                 origMediaName: file.originalname,
-                mediaSource: 'http://103.136.76.251:9999/file/images/' + file.filename
+                mediaSource: 'http://103.136.76.250:9999/file/images/' + file.filename
                 // mediaSource: path.join(__dirname + './../public/images/') + file.filename
             }
         });
