@@ -43,7 +43,7 @@ var md5 = require('md5');
 
 // manual
 exports.transaction = function(req, res) {
-    connection.query('SELECT * FROM tbl_transaction_header', function (error, rows, fields){
+    connection.query('SELECT a.*,b.username FROM tbl_transaction_header as a LEFT JOIN users as b ON a.id_user = b.id', function (error, rows, fields){
         if(error){
             console.log(error)
         } else{
@@ -65,26 +65,62 @@ exports.findTransaction = function(req, res) {
         }
     });
 };
-
-exports.createTransaction = function(req, res) {
-    var datetime            = new Date();
-    var nomor_transaction   = 'TX-'+ Math.floor(new Date() / 1000);
-    var qty                 = req.body.qty;
-    var price               = req.body.price;
-    var sub_total           = qty * price;
-    var id_user             = req.body.id_user;
-    var status              = 'WAITING';
-    var created_at          = datetime.toISOString().slice(0,10);
-
-    connection.query('INSERT INTO tbl_transaction_header (nomor_transaction, qty,price, sub_total, id_user, status, created_at) values (?,?,?,?,?,?,?)',
-    [ nomor_transaction, qty, price,sub_total ,id_user ,status ,created_at ], 
+exports.findTransactionId = function(req, res) {
+    
+    var id = req.params.id;
+    connection.query('SELECT * FROM tbl_transaction_request where nomor_transaction = ?',
+    [ id ], 
     function (error, rows, fields){
         if(error){
             console.log(error)
         } else{
-            response.ok("Berhasil menambahkan transaksi baru !", res)
+            response.ok(rows, res)
         }
     });
+};
+
+exports.createTransaction = function(req, res) {
+    var datetime            = new Date();
+    var nomor_transaction   = 'TX-'+ Math.floor(new Date() / 1000);
+    var qty                 = req.body.header.qty;
+    var zona               = req.body.header.zona;
+    var sub_total           = req.body.header.sub_total;
+    var id_user             = req.body.header.id_user;
+    var status              = 'WAITING';
+    var created_at          = datetime.toISOString().slice(0,10);
+
+    connection.query('INSERT INTO tbl_transaction_header (nomor_transaction, qty,zona, sub_total, id_user, status, created_at) values (?,?,?,?,?,?,?)',
+    [ nomor_transaction, qty, zona,sub_total ,id_user ,status ,created_at ], 
+    function (error, rows, fields){
+        if(error){
+            console.log(error)
+        } else{
+           
+            Object.entries(req.body.detail).forEach(([key, val]) => {
+                var d_plan_name = val.name_plan;
+                var d_price = val.price;
+                var d_qty = val.qty;
+                var d_sub_total = val.subtotal;
+
+                
+                connection.query('INSERT INTO tbl_transaction_request (plan_name, price,qty,sub_total,created_at, status, id_user, nomor_transaction, zona) values (?,?,?,?,?,?,?,?,?)',
+                [ d_plan_name, d_price,d_qty,d_sub_total ,created_at ,status ,id_user,nomor_transaction,zona ], 
+                function (error, rows, fields){
+                    if(error){
+                        console.log(error)
+                    } else{
+                        response.ok("Berhasil menambahkan transaksi baru !", res)
+                      
+                    }
+                });
+            });
+        }
+    });
+
+ 
+   
+
+   
 };
 
 exports.approveTransaction = function(req, res) {

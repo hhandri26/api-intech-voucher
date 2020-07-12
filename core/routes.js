@@ -41,7 +41,7 @@ module.exports = function(app) {
     .get(upload_file.access_file);
 
     // voucher
-    app.route('/voucher/voucher_catagories')
+    app.route('/voucher/voucher_catagories/:id')
     .get(voucher.voucher_catagories);
 
 
@@ -68,6 +68,9 @@ module.exports = function(app) {
     app.route('/voucher/tag')
     .post(voucher.voucherTag);
 
+    app.route('/voucher/area')
+    .get(voucher.voucherArea);
+
     // detail
     app.route('/payment/detail')
     .post(paymentdetail.createTransactionDetail);
@@ -77,6 +80,9 @@ module.exports = function(app) {
 
     app.route('/voucher_all')
     .get(paymentdetail.voucherAll);
+
+    app.route('/payment/detail/:id')
+    .get(payment.findTransactionId);
 
 
 

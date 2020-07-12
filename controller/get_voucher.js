@@ -4,7 +4,8 @@ var response = require('../core/res');
 var connection = require('../connection/conn_voucher');
 
 exports.voucher_catagories= function(req, res) {
-    connection.query('SELECT * FROM tbl_plans', function (error, rows, fields){
+    var id = req.params.id;
+    connection.query('SELECT * FROM tbl_plans where owner_name = ?',[id], function (error, rows, fields){
         if(error){
             console.log(error)
         } else{
@@ -15,10 +16,10 @@ exports.voucher_catagories= function(req, res) {
 
 
 exports.voucher= function(req, res) {
-    var price = req.body.price;
+    var plan_name = req.body.plan_name;
     var qty    =  req.body.qty;
-    connection.query('SELECT id, price,secret,plan_name FROM tbl_vouchers where expired_on is NULL and user_buy is NULL and price = ? order by id ASC LIMIT ?',
-    [price, qty], 
+    connection.query('SELECT id, price,secret,plan_name FROM tbl_vouchers where expired_on is NULL and user_buy is NULL and plan_name = ? order by id ASC LIMIT ?',
+    [plan_name, qty], 
     function (error, rows, fields){
         if(error){
             console.log(error)
@@ -40,6 +41,20 @@ exports.voucherTag = function(req, res) {
             console.log(error)
         } else{
             response.ok("Update voucher berhail !", res)
+        }
+    });
+};
+
+exports.voucherArea = function(req, res) {
+    var price = req.body.price;
+    var qty    =  req.body.qty;
+    connection.query('SELECT owner_name FROM tbl_plans group by owner_name order by owner_name asc',
+    [price, qty], 
+    function (error, rows, fields){
+        if(error){
+            console.log(error)
+        } else{
+            response.ok(rows, res)
         }
     });
 };

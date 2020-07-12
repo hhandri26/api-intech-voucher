@@ -55,9 +55,10 @@ exports.createUsers = function(req, res) {
     var role = req.body.role;
     var phone_number = req.body.phone_number;
     var status = req.body.status;
+    var zona = req.body.zona;
 
-    connection.query('INSERT INTO users (username, email,real_password, password, role, phone_number, status) values (?,?,?,?,?,?,?)',
-    [ username, email, real_password,password ,role ,phone_number ,status ], 
+    connection.query('INSERT INTO users (username, email,real_password, password, role, phone_number, status,zona) values (?,?,?,?,?,?,?,?)',
+    [ username, email, real_password,password ,role ,phone_number ,status,zona ], 
     function (error, rows, fields){
         if(error){
             console.log(error)
@@ -77,9 +78,10 @@ exports.updateUsers = function(req, res) {
     var role = req.body.role;
     var phone_number = req.body.phone_number;
     var status = req.body.status;
+    var zona = req.body.zona;
 
-    connection.query('UPDATE users SET username = ?, email = ?,real_password = ?, password = ?,role = ?, phone_number = ?,status = ? WHERE id = ?',
-    [ username, email, real_password,password,role,phone_number,status,id], 
+    connection.query('UPDATE users SET username = ?, email = ?,real_password = ?, password = ?,role = ?, phone_number = ?,status = ?, zona = ? WHERE id = ?',
+    [ username, email, real_password,password,role,phone_number,status,zona,id], 
     function (error, rows, fields){
         if(error){
             console.log(error)
