@@ -71,6 +71,9 @@ module.exports = function(app) {
     app.route('/voucher/area')
     .get(voucher.voucherArea);
 
+    app.route('/voucher/remaining')
+    .get(voucher.Remainingvoucher);
+
     // detail
     app.route('/payment/detail')
     .post(paymentdetail.createTransactionDetail);

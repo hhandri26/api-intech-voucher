@@ -29,6 +29,17 @@ exports.voucher= function(req, res) {
     });
 };
 
+exports.Remainingvoucher= function(req, res) {
+    connection.query('select count(id) as sisa, plan_name,price,owner_name from mixradius_radDB.tbl_vouchers where user_buy is null  group by plan_name;', 
+    function (error, rows, fields){
+        if(error){
+            console.log(error)
+        } else{
+            response.ok(rows, res)
+        }
+    });
+};
+
 exports.voucherTag = function(req, res) {
     var id              = req.body.id;
     var user_buy   = req.body.id_user;
