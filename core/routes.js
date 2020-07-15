@@ -74,6 +74,8 @@ module.exports = function(app) {
     app.route('/voucher/remaining')
     .get(voucher.Remainingvoucher);
 
+   
+
     // detail
     app.route('/payment/detail')
     .post(paymentdetail.createTransactionDetail);
@@ -81,11 +83,21 @@ module.exports = function(app) {
     app.route('/voucher_done/:id')
     .get(paymentdetail.voucher);
 
+    app.route('/voucher_done_status/:id')
+    .get(paymentdetail.voucher_done);
+
     app.route('/voucher_all')
     .get(paymentdetail.voucherAll);
 
     app.route('/payment/detail/:id')
     .get(payment.findTransactionId);
+
+    app.route('/payment/status_vucher')
+    .put(paymentdetail.voucherStatus);
+
+    // send email
+    app.route('/send_email')
+    .post(payment.sendEmail);
 
 
 

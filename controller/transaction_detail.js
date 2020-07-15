@@ -5,7 +5,18 @@ var connection = require('../connection/conn');
 var md5 = require('md5');
 exports.voucher = function(req, res) {
     var id = req.params.id;
-    connection.query('SELECT * FROM tbl_transaction_detail where id_user = ?',[id], function (error, rows, fields){
+    connection.query('SELECT * FROM tbl_transaction_detail  where status is null and id_user = ?',[id], function (error, rows, fields){
+        if(error){
+            console.log(error)
+        } else{
+            response.ok(rows, res)
+        }
+    });
+};
+
+exports.voucher_done = function(req, res) {
+    var id = req.params.id;
+    connection.query('SELECT * FROM tbl_transaction_detail  where status = "done" and id_user = ?',[id], function (error, rows, fields){
         if(error){
             console.log(error)
         } else{
@@ -47,6 +58,22 @@ exports.createTransactionDetail = function(req, res) {
 
 exports.index = function(req, res) {
     response.ok("API Running!", res)
+};
+
+exports.voucherStatus = function(req, res) {
+    var id              = req.body.id;
+    var status   = req.body.status;
+   
+
+    connection.query('UPDATE tbl_transaction_detail SET status = ? WHERE id = ?',
+    [ status,id], 
+    function (error, rows, fields){
+        if(error){
+            console.log(error)
+        } else{
+            response.ok("Update voucher berhail !", res)
+        }
+    });
 };
 
 
