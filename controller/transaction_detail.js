@@ -27,7 +27,28 @@ exports.voucher_done = function(req, res) {
 
 exports.voucherAll = function(req, res) {
     var id = req.params.id;
-    connection.query('SELECT * FROM tbl_transaction_detail ', function (error, rows, fields){
+    connection.query('SELECT a.*,DATE_FORMAT(a.created_at, "%d/%m/%Y") as date, b.username as reseller FROM tbl_transaction_detail as a LEFT JOIN users as b ON a.id_user = b.id ', function (error, rows, fields){
+        if(error){
+            console.log(error)
+        } else{
+            response.ok(rows, res)
+        }
+    });
+};
+
+exports.report = function(req, res) {
+    var date1 = req.body.date1;
+    var date2 = req.body.date2;
+    var username = req.body.username;
+    let sql = 'SELECT a.id_voucher,a.plan_name,a.price,a.kode_voucher,a.nomor_transaction,DATE_FORMAT(a.created_at, "%d/%m/%Y") as date,b.username as reseller FROM tbl_transaction_detail as a LEFT JOIN users as b ON a.id_user = b.id where a.kode_voucher is not null ';
+    if(date1 !== '' && date2 !== ''){
+        sql += 'and (date(a.created_at) BETWEEN "'+date1+'" AND "'+date2+'")'
+
+    }
+    if(username !== ''){
+        sql += ' and a.id_user = ' + username
+    }
+    connection.query(sql, function (error, rows, fields){
         if(error){
             console.log(error)
         } else{

@@ -44,7 +44,44 @@ var nodemailer = require('nodemailer');
 
 // manual
 exports.transaction = function(req, res) {
-    connection.query('SELECT a.*,b.username FROM tbl_transaction_header as a LEFT JOIN users as b ON a.id_user = b.id', function (error, rows, fields){
+    connection.query('SELECT a.*,DATE_FORMAT(a.created_at, "%d/%m/%Y") as date, b.username FROM tbl_transaction_header as a LEFT JOIN users as b ON a.id_user = b.id', function (error, rows, fields){
+        if(error){
+            console.log(error)
+        } else{
+            response.ok(rows, res)
+        }
+    });
+};
+
+exports.finance = function(req, res) {
+    var status = "'APPROVED'";
+    connection.query('SELECT a.*,DATE_FORMAT(a.created_at, "%d/%m/%Y") as date, b.username FROM tbl_transaction_header as a LEFT JOIN users as b ON a.id_user = b.id where a.status <> '+status, function (error, rows, fields){
+        if(error){
+            console.log(error)
+        } else{
+            response.ok(rows, res)
+        }
+    });
+};
+
+exports.report = function(req, res) {
+    var date1 = req.body.date1;
+    var date2 = req.body.date2;
+    var username = req.body.username;
+    var zona = req.body.zona;
+    let sql = 'SELECT a.*,DATE_FORMAT(a.created_at, "%d/%m/%Y") as date,b.username FROM tbl_transaction_header as a LEFT JOIN users as b ON a.id_user = b.id where a.nomor_transaction is not null ';
+    if(date1 !== '' && date2 !== ''){
+        sql += 'and (date(a.created_at) BETWEEN "'+date1+'" AND "'+date2+'")'
+
+    }
+    if(username !== ''){
+        sql += ' and a.id_user = ' + username
+    }
+
+    if(zona !== ''){
+        sql += ' and a.zona = ' + zona
+    }
+    connection.query(sql, function (error, rows, fields){
         if(error){
             console.log(error)
         } else{

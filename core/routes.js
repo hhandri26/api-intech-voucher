@@ -62,6 +62,12 @@ module.exports = function(app) {
     app.route('/payment_all')
     .get(payment.transaction);
 
+    app.route('/payment_finance')
+    .get(payment.finance);
+
+    app.route('/transaction_report')
+    .post(payment.report);
+
     app.route('/voucher/list')
     .post(voucher.voucher);
 
@@ -73,6 +79,9 @@ module.exports = function(app) {
 
     app.route('/voucher/remaining')
     .get(voucher.Remainingvoucher);
+
+    app.route('/voucher/report_area')
+    .get(voucher.reportArea);
 
    
 
@@ -94,6 +103,9 @@ module.exports = function(app) {
 
     app.route('/payment/status_vucher')
     .put(paymentdetail.voucherStatus);
+
+    app.route('/voucher_report')
+    .post(paymentdetail.report);
 
     // send email
     app.route('/send_email')

@@ -14,6 +14,16 @@ exports.voucher_catagories= function(req, res) {
     });
 };
 
+exports.reportArea= function(req, res) {
+    connection.query('select a.plan_name, count(a.id) as jumlah_voucher,sum(a.price) as total_harga,b.username,b.nasipaddress,c.description as deskripsi_location,c.shortname as location,d.username as reseller,a.expired_on as tanggal,DATE_FORMAT(a.expired_on, "%d/%m/%Y") as date from tbl_vouchers as a LEFT JOIN radacct as b on a.code = b.username LEFT JOIN nas as c on b.nasipaddress = c.nasname LEFT JOIN tbl_reseller as d on a.user_buy = d.id where a.expired_on is not null and a.user_buy is not null group by a.plan_name and a.expired_on', function (error, rows, fields){
+        if(error){
+            console.log(error)
+        } else{
+            response.ok(rows, res)
+        }
+    });
+};
+
 
 exports.voucher= function(req, res) {
     var plan_name = req.body.plan_name;
