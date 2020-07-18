@@ -15,7 +15,7 @@ exports.voucher_catagories= function(req, res) {
 };
 
 exports.reportArea= function(req, res) {
-    connection.query('select a.plan_name, count(a.id) as jumlah_voucher,sum(a.price) as total_harga,b.username,b.nasipaddress,c.description as deskripsi_location,c.shortname as location,d.username as reseller,a.expired_on as tanggal,DATE_FORMAT(a.expired_on, "%d/%m/%Y") as date from tbl_vouchers as a LEFT JOIN radacct as b on a.code = b.username LEFT JOIN nas as c on b.nasipaddress = c.nasname LEFT JOIN tbl_reseller as d on a.user_buy = d.id where a.expired_on is not null and a.user_buy is not null group by a.plan_name and a.expired_on', function (error, rows, fields){
+    connection.query('select a.plan_name, count(a.id) as jumlah_voucher,sum(a.price) as total_harga,b.username,b.nasipaddress,c.description as deskripsi_location,c.shortname as location,d.username as reseller,a.expired_on as tanggal,DATE_FORMAT(a.expired_on, "%d/%m/%Y") as date from tbl_vouchersx as a LEFT JOIN radacct as b on a.code = b.username LEFT JOIN nas as c on b.nasipaddress = c.nasname LEFT JOIN users as d on a.user_buy = d.id where a.expired_on is not null and a.user_buy is not null group by a.plan_name and a.expired_on', function (error, rows, fields){
         if(error){
             console.log(error)
         } else{
@@ -28,7 +28,7 @@ exports.reportArea= function(req, res) {
 exports.voucher= function(req, res) {
     var plan_name = req.body.plan_name;
     var qty    =  req.body.qty;
-    connection.query('SELECT id, price,secret,plan_name FROM tbl_vouchers where expired_on is NULL and user_buy is NULL and plan_name = ? order by id ASC LIMIT ?',
+    connection.query('SELECT id, price,secret,plan_name FROM tbl_vouchersx where expired_on is NULL and user_buy is NULL and plan_name = ? order by id ASC LIMIT ?',
     [plan_name, qty], 
     function (error, rows, fields){
         if(error){
@@ -40,7 +40,7 @@ exports.voucher= function(req, res) {
 };
 
 exports.Remainingvoucher= function(req, res) {
-    connection.query('select count(id) as sisa, plan_name,price,owner_name from mixradius_radDB.tbl_vouchers where user_buy is null  group by plan_name;', 
+    connection.query('select count(id) as sisa, plan_name,price,owner_name from mixradius_radDB.tbl_vouchersx where user_buy is null  group by plan_name;', 
     function (error, rows, fields){
         if(error){
             console.log(error)
@@ -55,7 +55,7 @@ exports.voucherTag = function(req, res) {
     var user_buy   = req.body.id_user;
    
 
-    connection.query('UPDATE tbl_vouchers SET user_buy = ? WHERE id = ?',
+    connection.query('UPDATE tbl_vouchersx SET user_buy = ? WHERE id = ?',
     [ user_buy,id], 
     function (error, rows, fields){
         if(error){
