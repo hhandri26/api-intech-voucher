@@ -5,7 +5,8 @@ var connection = require('../connection/conn');
 var md5 = require('md5');
 exports.voucher = function(req, res) {
     var id = req.params.id;
-    connection.query('SELECT * FROM tbl_transaction_detail  where status is null and id_user = ?',[id], function (error, rows, fields){
+    var status = 'DONE';
+    connection.query('SELECT * FROM tbl_transaction_detail  where status <> '+status+' and id_user = ?',[id], function (error, rows, fields){
         if(error){
             console.log(error)
         } else{
