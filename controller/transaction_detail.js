@@ -26,6 +26,27 @@ exports.voucher_done = function(req, res) {
     });
 };
 
+exports.search_voucher = function(req, res) {
+    var id = req.params.id;
+    connection.query('SELECT * FROM tbl_transaction_detail  where nomor_transaction = ?',[id], function (error, rows, fields){
+        if(error){
+            console.log(error)
+        } else{
+            response.ok(rows, res)
+        }
+    });
+};
+exports.voucher_nomor_transaction = function(req, res) {
+    var id = req.params.id;
+    var status = "'APPROVED'";
+    connection.query('SELECT * FROM tbl_transaction_header  where status = '+status+' and id_user = ?',[id], function (error, rows, fields){
+        if(error){
+            console.log(error)
+        } else{
+            response.ok(rows, res)
+        }
+    });
+};
 exports.voucherAll = function(req, res) {
     var id = req.params.id;
     connection.query('SELECT a.*,DATE_FORMAT(a.created_at, "%d/%m/%Y") as date, b.username as reseller FROM tbl_transaction_detail as a LEFT JOIN users as b ON a.id_user = b.id ', function (error, rows, fields){
