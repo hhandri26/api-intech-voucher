@@ -129,8 +129,8 @@ exports.createTransaction = function(req, res) {
     var created_at          = datetime.toISOString().slice(0,10);
     
 
-    connection.query('INSERT INTO tbl_transaction_header (nomor_transaction, qty,zona, sub_total, id_user, status, created_at) values (?,?,?,?,?,?,?)',
-    [ nomor_transaction, qty, zona,sub_total ,id_user ,status ,created_at ], 
+    connection.query('INSERT INTO tbl_transaction_header (nomor_transaction, qty,zona, sub_total, id_user, status, created_at,email) values (?,?,?,?,?,?,?,?)',
+    [ nomor_transaction, qty, zona,sub_total ,id_user ,status ,created_at,email ], 
     function (error, rows, fields){
         if(error){
             console.log(error)
@@ -149,40 +149,39 @@ exports.createTransaction = function(req, res) {
                     if(error){
                         console.log(error)
                     } else{
+                        var transporter = nodemailer.createTransport({
+                            //service: 'gmail',
+                            host: "mail.intechmandiri.com",
+                            port: 465,
+                            secure: true, // true for 465, false for other ports
+                            auth: {
+                              user: 'voucher@intechmandiri.com',
+                              pass: 'Intech@2020'
+                            }
+                          });
+                          
+                          var mailOptions = {
+                            from: 'voucher@intechmandiri.com',
+                            to: email,
+                            subject: 'Transaksi Pembelian Voucher',
+                            text: 'Pembelian voucher sedang di prosess dengan nomor Transaksi '+nomor_transaction
+                          };
+                          
+                          transporter.sendMail(mailOptions, function(error, info){
+                            if (error) {
+                                console.log('error')
+                              console.log(error);
+                            } else {
+                              console.log('Email sent: ');
+                            }
+                          });
+            
                         response.ok("Berhasil menambahkan transaksi baru !", res)
                       
                     }
                 });
             });
-
-            // send email
-            var transporter = nodemailer.createTransport({
-                //service: 'gmail',
-                host: "mail.intechmandiri.com",
-                port: 465,
-                secure: true, // true for 465, false for other ports
-                auth: {
-                  user: 'handri@intechmandiri.com',
-                  pass: 'Rickdale00'
-                }
-              });
-              
-              var mailOptions = {
-                from: 'handri@intechmandiri.com',
-                to: email,
-                subject: 'Transaksi Pembelian Voucher',
-                text: 'Pembelian voucher sedang di prosess !'
-              };
-              
-              transporter.sendMail(mailOptions, function(error, info){
-                if (error) {
-                    console.log('error')
-                  console.log(error);
-                } else {
-                  console.log('Email sent: ');
-                }
-              });
-
+            
         }
     });
 
@@ -229,6 +228,8 @@ exports.approveTransaction = function(req, res) {
     var user_approved   = req.body.user_approved;
     var status          = req.body.status;
     var updated_at      = datetime.toISOString().slice(0,10);
+    var nomor_transaction = req.body.nomor_transaction;
+    var email           = req.body.email;
 
     connection.query('UPDATE tbl_transaction_header SET user_approved = ?, status = ?,updated_at = ? WHERE id = ?',
     [ user_approved, status, updated_at,id], 
@@ -236,6 +237,34 @@ exports.approveTransaction = function(req, res) {
         if(error){
             console.log(error)
         } else{
+            
+            // send email
+            var transporter = nodemailer.createTransport({
+                //service: 'gmail',
+                host: "mail.intechmandiri.com",
+                port: 465,
+                secure: true, // true for 465, false for other ports
+                auth: {
+                  user: 'voucher@intechmandiri.com',
+                  pass: 'Intech@2020'
+                }
+              });
+              
+              var mailOptions = {
+                from: 'voucher@intechmandiri.com',
+                to: email,
+                subject: 'Transaksi Pembelian Voucher',
+                text: 'Pembelian voucher Berhasil dengan nomor Transaksi '+nomor_transaction,
+              };
+              
+              transporter.sendMail(mailOptions, function(error, info){
+                if (error) {
+                    console.log('error')
+                  console.log(error);
+                } else {
+                  console.log('Email sent: ');
+                }
+              });
             response.ok("Approval berhasil!", res)
         }
     });
