@@ -93,7 +93,7 @@ exports.report = function(req, res) {
 exports.findTransaction = function(req, res) {
     
     var id = req.params.id;
-    connection.query('SELECT * FROM tbl_transaction_header where id_user = ?',
+    connection.query('SELECT *,DATE_FORMAT(created_at, "%d/%m/%Y") as date FROM tbl_transaction_header where id_user = ?',
     [ id ], 
     function (error, rows, fields){
         if(error){
@@ -142,7 +142,7 @@ exports.createTransaction = function(req, res) {
                 var d_plan_name = val.name_plan;
                 var d_price = val.price;
                 var d_qty = val.qty;
-                var d_sub_total = val.subtotal;
+                var d_sub_total = Number(d_qty) * Number(d_price);
 
                 
                 connection.query('INSERT INTO tbl_transaction_request (plan_name, price,qty,sub_total,created_at, status, id_user, nomor_transaction, zona) values (?,?,?,?,?,?,?,?,?)',

@@ -17,7 +17,7 @@ exports.voucher = function(req, res) {
 
 exports.voucher_done = function(req, res) {
     var id = req.params.id;
-    connection.query('SELECT a.*,DATE_FORMAT(a.created_at, "%d/%m/%Y") as date FROM tbl_transaction_detail as a LEFT JOIN tbl_vouchers as b on a.kode_voucher = b.code  where b.trx_status = "FINISH" and a.id_user = ?',[id], function (error, rows, fields){
+    connection.query('SELECT *,DATE_FORMAT(created_at, "%d/%m/%Y") as date FROM tbl_transaction_detail where status = "DONE" and id_user = ?',[id], function (error, rows, fields){
         if(error){
             console.log(error)
         } else{
