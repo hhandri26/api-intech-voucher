@@ -170,7 +170,7 @@ exports.createTransaction = function(req, res) {
               var mailOptions = {
                 from: 'voucher@intechmandiri.com',
                 to: email,
-                subject: 'Transaksi Pembelian Voucher',
+                subject: 'Transaksi Pembelian Voucher' +nomor_transaction,
                 text: 'Pembelian voucher sedang di prosess dengan nomor Transaksi '+nomor_transaction
               };
               
