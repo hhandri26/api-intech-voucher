@@ -142,7 +142,7 @@ exports.createTransaction = function(req, res) {
                 var d_plan_name = val.name_plan;
                 var d_price = val.price;
                 var d_qty = val.qty;
-                var d_sub_total = Number(d_qty) * Number(d_price);
+                var d_sub_total = val.subtotal;
 
                 
                 connection.query('INSERT INTO tbl_transaction_request (plan_name, price,qty,sub_total,created_at, status, id_user, nomor_transaction, zona) values (?,?,?,?,?,?,?,?,?)',
