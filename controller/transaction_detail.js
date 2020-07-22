@@ -6,7 +6,7 @@ var md5 = require('md5');
 exports.voucher = function(req, res) {
     var id = req.params.id;
     var status = "'DONE'";
-    connection.query('SELECT * FROM tbl_transaction_detail  where status <> '+status+' and id_user = ?',[id], function (error, rows, fields){
+    connection.query('SELECT * , DATE_FORMAT(created_at, "%d/%m/%Y") as date FROM tbl_transaction_detail  where status <> '+status+' and id_user = ?',[id], function (error, rows, fields){
         if(error){
             console.log(error)
         } else{
@@ -17,7 +17,7 @@ exports.voucher = function(req, res) {
 
 exports.voucher_done = function(req, res) {
     var id = req.params.id;
-    connection.query('SELECT a.* FROM tbl_transaction_detail as a LEFT JOIN tbl_vouchers as b on a.kode_voucher = b.code  where b.trx_status = "FINISH" and a.id_user = ?',[id], function (error, rows, fields){
+    connection.query('SELECT a.*,DATE_FORMAT(a.created_at, "%d/%m/%Y") as date FROM tbl_transaction_detail as a LEFT JOIN tbl_vouchers as b on a.kode_voucher = b.code  where b.trx_status = "FINISH" and a.id_user = ?',[id], function (error, rows, fields){
         if(error){
             console.log(error)
         } else{
@@ -28,7 +28,7 @@ exports.voucher_done = function(req, res) {
 
 exports.search_voucher = function(req, res) {
     var id = req.params.id;
-    connection.query('SELECT * FROM tbl_transaction_detail  where nomor_transaction = ?',[id], function (error, rows, fields){
+    connection.query('SELECT *,DATE_FORMAT(created_at, "%d/%m/%Y") as date FROM tbl_transaction_detail  where nomor_transaction = ?',[id], function (error, rows, fields){
         if(error){
             console.log(error)
         } else{
@@ -87,9 +87,10 @@ exports.createTransactionDetail = function(req, res) {
     var plan_name           = req.body.plan_name;
     var created_at          = datetime.toISOString().slice(0,10);
     var kode_voucher        = req.body.secret;
+    var time                = datetime.toISOString().match(/(\d{2}:){2}\d{2}/)[0];
 
-    connection.query('INSERT INTO tbl_transaction_detail (nomor_transaction,price, id_user, id_voucher, plan_name, created_at, kode_voucher) values (?,?,?,?,?,?,?)',
-    [ nomor_transaction, price, id_user,id_voucher  ,plan_name ,created_at,kode_voucher ], 
+    connection.query('INSERT INTO tbl_transaction_detail (nomor_transaction,price, id_user, id_voucher, plan_name, created_at, kode_voucher,time) values (?,?,?,?,?,?,?,?)',
+    [ nomor_transaction, price, id_user,id_voucher  ,plan_name ,created_at,kode_voucher,time ], 
     function (error, rows, fields){
         if(error){
             console.log(error)

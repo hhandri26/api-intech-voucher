@@ -127,10 +127,12 @@ exports.createTransaction = function(req, res) {
     var id_user             = req.body.header.id_user;
     var status              = 'WAITING';
     var created_at          = datetime.toISOString().slice(0,10);
+    var time                = datetime.toISOString().match(/(\d{2}:){2}\d{2}/)[0];
+
     
 
-    connection.query('INSERT INTO tbl_transaction_header (nomor_transaction, qty,zona, sub_total, id_user, status, created_at,email) values (?,?,?,?,?,?,?,?)',
-    [ nomor_transaction, qty, zona,sub_total ,id_user ,status ,created_at,email ], 
+    connection.query('INSERT INTO tbl_transaction_header (nomor_transaction, qty,zona, sub_total, id_user, status, created_at,email,time) values (?,?,?,?,?,?,?,?,?)',
+    [ nomor_transaction, qty, zona,sub_total ,id_user ,status ,created_at,email,time ], 
     function (error, rows, fields){
         if(error){
             console.log(error)
