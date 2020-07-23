@@ -236,6 +236,7 @@ exports.approveTransaction = function(req, res) {
     var updated_at      = datetime.toISOString().slice(0,10);
     var nomor_transaction = req.body.nomor_transaction;
     var email           = req.body.email;
+    var sub_total       = req.body.sub_total;
 
     connection.query('UPDATE tbl_transaction_header SET user_approved = ?, status = ?,updated_at = ? WHERE id = ?',
     [ user_approved, status, updated_at,id], 
@@ -260,7 +261,7 @@ exports.approveTransaction = function(req, res) {
                 from: 'voucher@intechmandiri.com',
                 to: email,
                 subject: 'Topup Voucher Dengan Nomor Transaksi' + nomor_transaction +' Telah berhasil !',
-                text: 'Topup Voucher Dengan nomor transaksi  '+nomor_transaction +' Telah berhasil !',
+                text: 'Topup Voucher Dengan nomor transaksi  '+nomor_transaction +' Telah berhasil ! dengan nominal '+sub_total,
               };
               
               transporter.sendMail(mailOptions, function(error, info){
