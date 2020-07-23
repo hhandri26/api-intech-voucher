@@ -6,7 +6,7 @@ var md5 = require('md5');
 exports.voucher = function(req, res) {
     var id = req.params.id;
     var status = "'DONE'";
-    connection.query('SELECT * , DATE_FORMAT(created_at, "%d/%m/%Y") as date FROM tbl_transaction_detail  where status <> '+status+' and id_user = ?',[id], function (error, rows, fields){
+    connection.query('SELECT * , DATE_FORMAT(created_at, "%d/%m/%Y") as date, FORMAT(price, 0) as harga FROM tbl_transaction_detail  where status <> '+status+' and id_user = ?',[id], function (error, rows, fields){
         if(error){
             console.log(error)
         } else{

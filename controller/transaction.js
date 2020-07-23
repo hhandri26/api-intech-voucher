@@ -93,7 +93,7 @@ exports.report = function(req, res) {
 exports.findTransaction = function(req, res) {
     
     var id = req.params.id;
-    connection.query('SELECT *,DATE_FORMAT(created_at, "%d/%m/%Y") as date FROM tbl_transaction_header where id_user = ?',
+    connection.query('SELECT *,DATE_FORMAT(created_at, "%d/%m/%Y") as date, FORMAT(sub_total, 0) as harga FROM tbl_transaction_header where id_user = ?',
     [ id ], 
     function (error, rows, fields){
         if(error){
@@ -174,13 +174,7 @@ exports.createTransaction = function(req, res) {
                 text: 'Pembelian voucher sedang di prosess dengan nomor Transaksi '+nomor_transaction,
               };
 
-              var mailOptions2 = {
-                from: 'voucher@intechmandiri.com',
-                to: 'syahrial.basir@gmail.com',
-                subject: 'Approval Pembelian Voucher' +nomor_transaction,
-                text: 'Mohon di approve pembelian voucher dengan nomor Transaksi '+nomor_transaction
-
-              };
+             
               
               transporter.sendMail(mailOptions, function(error, info){
                 if (error) {
@@ -190,14 +184,7 @@ exports.createTransaction = function(req, res) {
                   console.log('Email sent: ');
                 }
               });
-              transporter.sendMail(mailOptions2, function(error, info){
-                if (error) {
-                    console.log('error')
-                  console.log(error);
-                } else {
-                  console.log('Email sent: ');
-                }
-              });
+              
 
             response.ok("Berhasil menambahkan transaksi baru !", res)
             
@@ -293,6 +280,8 @@ exports.uploadTransaction = function(req, res) {
     
     var id              = req.body.id;
     var bukti_transfer   = req.body.bukti_transfer;
+    var nomor_transaction = req.body.nomor_transaction;
+    var harga            = req.body.harga;
     var status = 'UPLOAD';
 
     connection.query('UPDATE tbl_transaction_header SET bukti_transfer = ?, status = ? WHERE id = ?',
@@ -301,6 +290,21 @@ exports.uploadTransaction = function(req, res) {
         if(error){
             console.log(error)
         } else{
+            var mailOptions2 = {
+                from: 'voucher@intechmandiri.com',
+                to: 'oscarosmu@gmail.com',
+                subject: 'Approve Top Up Voucher ' +nomor_transaction,
+                text: 'Approve top up voucher reseller dengan nomor Transkasi '+nomor_transaction +' Senilai Rp.'+harga
+
+              };
+            transporter.sendMail(mailOptions2, function(error, info){
+                if (error) {
+                    console.log('error')
+                  console.log(error);
+                } else {
+                  console.log('Email sent: ');
+                }
+              });
             response.ok("Upload berhasil!", res)
         }
     });
