@@ -290,6 +290,16 @@ exports.uploadTransaction = function(req, res) {
         if(error){
             console.log(error)
         } else{
+            var transporter = nodemailer.createTransport({
+                //service: 'gmail',
+                host: "mail.intechmandiri.com",
+                port: 465,
+                secure: true, // true for 465, false for other ports
+                auth: {
+                  user: 'voucher@intechmandiri.com',
+                  pass: 'Intech@2020'
+                }
+              });
             var mailOptions2 = {
                 from: 'voucher@intechmandiri.com',
                 to: 'oscarosmu@gmail.com',
