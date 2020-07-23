@@ -17,7 +17,7 @@ exports.voucher = function(req, res) {
 
 exports.voucher_done = function(req, res) {
     var id = req.params.id;
-    connection.query('SELECT *,DATE_FORMAT(created_at, "%d/%m/%Y") as date FROM tbl_transaction_detail where status = "DONE" and id_user = ?',[id], function (error, rows, fields){
+    connection.query('SELECT *,DATE_FORMAT(created_at, "%d/%m/%Y") as date,FORMAT(price, 0) as harga ,REPLACE(status, "DONE", "TERJUAL") as status,REPLACE(status, "NULL", "Aktif") as status FROM tbl_transaction_detail where id_user = ?',[id], function (error, rows, fields){
         if(error){
             console.log(error)
         } else{

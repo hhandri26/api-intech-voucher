@@ -259,8 +259,8 @@ exports.approveTransaction = function(req, res) {
               var mailOptions = {
                 from: 'voucher@intechmandiri.com',
                 to: email,
-                subject: 'Transaksi Pembelian Voucher' + nomor_transaction +' Telah berhasil !',
-                text: 'Pembelian voucher Berhasil dengan nomor Transaksi '+nomor_transaction,
+                subject: 'Topup Voucher Dengan Nomor Transaksi' + nomor_transaction +' Telah berhasil !',
+                text: 'Topup Voucher Dengan nomor transaksi  '+nomor_transaction +' Telah berhasil !',
               };
               
               transporter.sendMail(mailOptions, function(error, info){
@@ -331,6 +331,48 @@ exports.deleteTransaction = function(req, res) {
             console.log(error)
         } else{
             response.ok("Berhasil menghapus user!", res)
+        }
+    });
+};
+
+exports.CountVoucherTerjual = function(req, res) {
+    
+    var id = req.params.id;
+    connection.query('SELECT COUNT(id) as total FROM tbl_transaction_detail where status = "DONE" and id_user = ?',
+    [ id ], 
+    function (error, rows, fields){
+        if(error){
+            console.log(error)
+        } else{
+            response.ok(rows, res)
+        }
+    });
+};
+
+exports.CountVoucherSisa = function(req, res) {
+    
+    var id = req.params.id;
+    connection.query('SELECT COUNT(id) as total FROM tbl_transaction_detail where status <> "DONE" and id_user = ?',
+    [ id ], 
+    function (error, rows, fields){
+        if(error){
+            console.log(error)
+        } else{
+            response.ok(rows, res)
+        }
+    });
+};
+
+exports.CountVoucher = function(req, res) {
+    
+    var id = req.params.id;
+    connection.query('SELECT COUNT(id) as total FROM tbl_transaction_detail where id_user = ?',
+    [ id ], 
+    function (error, rows, fields){
+        if(error){
+            console.log(error)
+        } else{
+            response.ok(rows, res)
         }
     });
 };

@@ -117,6 +117,16 @@ module.exports = function(app) {
     app.route('/send_email')
     .post(payment.sendEmail);
 
+    // count total
+    app.route('/count_voucher_terjual/:id')
+    .get(payment.CountVoucherTerjual);
+
+    app.route('/count_voucher_sisa/:id')
+    .get(payment.CountVoucherSisa);
+
+    app.route('/count_voucher/:id')
+    .get(payment.CountVoucher);
+
 
 
 };
