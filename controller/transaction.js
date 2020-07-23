@@ -79,7 +79,7 @@ exports.report = function(req, res) {
     }
 
     if(zona !== ''){
-        sql += ' and a.zona = ' + zona
+        sql += ' and a.zona = "' + zona +'"'
     }
     connection.query(sql, function (error, rows, fields){
         if(error){
