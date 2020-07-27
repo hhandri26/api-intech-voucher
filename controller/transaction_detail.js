@@ -46,10 +46,10 @@ exports.search_voucher = function(req, res) {
         sql += 'and (date(created_at) BETWEEN "'+date1+'" AND "'+date2+'")'
 
     }
-    if(plan_name !== ''){
+    if(plan_name !== null){
         sql += ' and plan_name = "' + plan_name +'"'
     }
-    if(nomor_transaction !== ''){
+    if(nomor_transaction !== null){
         sql += ' and nomor_transaction = "' + nomor_transaction + '"'
     }
     connection.query(sql, function (error, rows, fields){
