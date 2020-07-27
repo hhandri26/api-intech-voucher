@@ -42,7 +42,7 @@ exports.search_voucher = function(req, res) {
     var plan_name = req.body.plan_name;
     var nomor_transaction = req.body.nomor_transaction;
     let sql = 'SELECT *,DATE_FORMAT(created_at, "%d/%m/%Y") as date FROM tbl_transaction_detail where kode_voucher is not null ';
-    if(date1 !== '' && date2 !== ''){
+    if(date1 !== null && date2 !== null){
         sql += 'and (date(created_at) BETWEEN "'+date1+'" AND "'+date2+'")'
 
     }

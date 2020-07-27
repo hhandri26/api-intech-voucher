@@ -307,6 +307,7 @@ exports.uploadTransaction = function(req, res) {
                 from: 'voucher@intechmandiri.com',
                 to: 'oscarosmu@gmail.com',
                 subject: 'Approve Top Up Voucher ' +nomor_transaction,
+                cc:'noc@intechmandiri.com,finance@intechmandiri.com',
                 text: 'Approve top up voucher reseller '+ username +' dengan nomor Transkasi '+nomor_transaction +' Senilai Rp.'+harga
 
               };
