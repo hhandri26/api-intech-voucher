@@ -237,9 +237,10 @@ exports.approveTransaction = function(req, res) {
     var nomor_transaction = req.body.nomor_transaction;
     var email           = req.body.email;
     var sub_total       = req.body.sub_total;
+    var get_voucher     = 1;
 
-    connection.query('UPDATE tbl_transaction_header SET user_approved = ?, status = ?,updated_at = ? WHERE id = ?',
-    [ user_approved, status, updated_at,id], 
+    connection.query('UPDATE tbl_transaction_header SET user_approved = ?, status = ?,updated_at = ?,get_voucher =? WHERE id = ?',
+    [ user_approved, status, updated_at,get_voucher,id], 
     function (error, rows, fields){
         if(error){
             console.log(error)

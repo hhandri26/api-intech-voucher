@@ -25,10 +25,34 @@ exports.voucher_done = function(req, res) {
         }
     });
 };
-
-exports.search_voucher = function(req, res) {
+exports.voucher_plan_name = function(req, res) {
     var id = req.params.id;
-    connection.query('SELECT *,DATE_FORMAT(created_at, "%d/%m/%Y") as date FROM tbl_transaction_detail  where nomor_transaction = ?',[id], function (error, rows, fields){
+    connection.query('SELECT plan_name FROM tbl_transaction_detail where id_user = ? group by plan_name',[id], function (error, rows, fields){
+        if(error){
+            console.log(error)
+        } else{
+            response.ok(rows, res)
+        }
+    });
+};
+exports.search_voucher = function(req, res) {
+    // var id = req.params.id;
+    var date1 = req.body.date1;
+    var date2 = req.body.date2;
+    var plan_name = req.body.plan_name;
+    var nomor_transaction = req.body.nomor_transaction;
+    let sql = 'SELECT *,DATE_FORMAT(created_at, "%d/%m/%Y") as date FROM tbl_transaction_detail where kode_voucher is not null ';
+    if(date1 !== '' && date2 !== ''){
+        sql += 'and (date(created_at) BETWEEN "'+date1+'" AND "'+date2+'")'
+
+    }
+    if(plan_name !== ''){
+        sql += ' and plan_name = "' + plan_name +'"'
+    }
+    if(nomor_transaction !== ''){
+        sql += ' and nomor_transaction = "' + nomor_transaction + '"'
+    }
+    connection.query(sql, function (error, rows, fields){
         if(error){
             console.log(error)
         } else{

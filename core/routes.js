@@ -94,6 +94,8 @@ module.exports = function(app) {
 
     app.route('/voucher_no_transaction/:id')
     .get(paymentdetail.voucher_nomor_transaction);
+    app.route('/voucher_plan_name/:id')
+    .get(paymentdetail.voucher_plan_name);
 
     app.route('/voucher_done_status/:id')
     .get(paymentdetail.voucher_done);
@@ -110,8 +112,8 @@ module.exports = function(app) {
     app.route('/voucher_report')
     .post(paymentdetail.report);
 
-    app.route('/search_voucher/:id')
-    .get(paymentdetail.search_voucher);
+    app.route('/search_voucher/')
+    .post(paymentdetail.search_voucher);
 
     // send email
     app.route('/send_email')
