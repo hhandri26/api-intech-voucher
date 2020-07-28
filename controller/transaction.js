@@ -44,7 +44,7 @@ var nodemailer = require('nodemailer');
 
 // manual
 exports.transaction = function(req, res) {
-    connection.query('SELECT a.*,DATE_FORMAT(a.created_at, "%d/%m/%Y") as date, b.username FROM tbl_transaction_header as a LEFT JOIN users as b ON a.id_user = b.id', function (error, rows, fields){
+    connection.query('SELECT a.*,DATE_FORMAT(a.created_at, "%d/%m/%Y") as date, FORMAT(a.sub_total, 0) as harga, b.username FROM tbl_transaction_header as a LEFT JOIN users as b ON a.id_user = b.id', function (error, rows, fields){
         if(error){
             console.log(error)
         } else{
@@ -55,7 +55,7 @@ exports.transaction = function(req, res) {
 
 exports.finance = function(req, res) {
     var status = "'APPROVED'";
-    connection.query('SELECT a.*,DATE_FORMAT(a.created_at, "%d/%m/%Y") as date, b.username FROM tbl_transaction_header as a LEFT JOIN users as b ON a.id_user = b.id where a.status <> '+status, function (error, rows, fields){
+    connection.query('SELECT a.*,DATE_FORMAT(a.created_at, "%d/%m/%Y") as date, FORMAT(a.sub_total, 0) as harga, b.username FROM tbl_transaction_header as a LEFT JOIN users as b ON a.id_user = b.id where a.status <> '+status, function (error, rows, fields){
         if(error){
             console.log(error)
         } else{
@@ -69,7 +69,7 @@ exports.report = function(req, res) {
     var date2 = req.body.date2;
     var username = req.body.username;
     var zona = req.body.zona;
-    let sql = 'SELECT a.*,DATE_FORMAT(a.created_at, "%d/%m/%Y") as date,b.username FROM tbl_transaction_header as a LEFT JOIN users as b ON a.id_user = b.id where a.nomor_transaction is not null ';
+    let sql = 'SELECT a.*,DATE_FORMAT(a.created_at, "%d/%m/%Y") as date,b.username,FORMAT(a.sub_total, 0) as harga FROM tbl_transaction_header as a LEFT JOIN users as b ON a.id_user = b.id where a.nomor_transaction is not null ';
     if(date1 !== '' && date2 !== ''){
         sql += 'and (date(a.created_at) BETWEEN "'+date1+'" AND "'+date2+'")'
 
@@ -106,7 +106,7 @@ exports.findTransaction = function(req, res) {
 exports.findTransactionId = function(req, res) {
     
     var id = req.params.id;
-    connection.query('SELECT * FROM tbl_transaction_request where nomor_transaction = ?',
+    connection.query('SELECT *, FORMAT(price, 0) as harga FROM tbl_transaction_detail where nomor_transaction = ?',
     [ id ], 
     function (error, rows, fields){
         if(error){

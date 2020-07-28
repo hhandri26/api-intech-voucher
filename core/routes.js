@@ -6,6 +6,7 @@ module.exports = function(app) {
     var payment = require('../controller/transaction');
     var paymentdetail = require('../controller/transaction_detail');
     var voucher = require('../controller/get_voucher');
+    var user_lokasi = require('../controller/user_lokasi');
 
 
     app.route('/')
@@ -128,6 +129,13 @@ module.exports = function(app) {
 
     app.route('/count_voucher/:id')
     .get(payment.CountVoucher);
+
+    //user lokasi
+    app.route('/user/lokasi/:id')
+    .get(user_lokasi.index);
+    app.route('/user/lokasi')
+    .post(user_lokasi.save);
+
 
 
 

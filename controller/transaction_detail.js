@@ -74,7 +74,7 @@ exports.voucher_nomor_transaction = function(req, res) {
 };
 exports.voucherAll = function(req, res) {
     var id = req.params.id;
-    connection.query('SELECT a.*,DATE_FORMAT(a.created_at, "%d/%m/%Y") as date, b.username as reseller FROM tbl_transaction_detail as a LEFT JOIN users as b ON a.id_user = b.id ', function (error, rows, fields){
+    connection.query('SELECT a.*,DATE_FORMAT(a.created_at, "%d/%m/%Y") as date,FORMAT(a.price, 0) as harga, b.username as reseller FROM tbl_transaction_detail as a LEFT JOIN users as b ON a.id_user = b.id ', function (error, rows, fields){
         if(error){
             console.log(error)
         } else{
@@ -87,7 +87,7 @@ exports.report = function(req, res) {
     var date1 = req.body.date1;
     var date2 = req.body.date2;
     var username = req.body.username;
-    let sql = 'SELECT a.id_voucher,a.plan_name,a.price,a.kode_voucher,a.nomor_transaction,DATE_FORMAT(a.created_at, "%d/%m/%Y") as date,b.username as reseller FROM tbl_transaction_detail as a LEFT JOIN users as b ON a.id_user = b.id where a.kode_voucher is not null ';
+    let sql = 'SELECT a.id_voucher,a.plan_name,a.price,a.kode_voucher,a.nomor_transaction,DATE_FORMAT(a.created_at, "%d/%m/%Y") as date,FORMAT(a.price, 0) as harga,b.username as reseller FROM tbl_transaction_detail as a LEFT JOIN users as b ON a.id_user = b.id where a.kode_voucher is not null ';
     if(date1 !== '' && date2 !== ''){
         sql += 'and (date(a.created_at) BETWEEN "'+date1+'" AND "'+date2+'")'
 
