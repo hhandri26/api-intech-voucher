@@ -62,8 +62,7 @@ exports.search_voucher = function(req, res) {
 };
 exports.voucher_nomor_transaction = function(req, res) {
     var id = req.params.id;
-    var status = "'APPROVED'";
-    connection.query('SELECT * FROM tbl_transaction_header  where status = '+status+' and id_user = ?',[id], function (error, rows, fields){
+    connection.query('SELECT * FROM tbl_transaction_header  where id_user = ?',[id], function (error, rows, fields){
         if(error){
             console.log(error)
         } else{
