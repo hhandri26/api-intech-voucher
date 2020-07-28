@@ -40,6 +40,7 @@ exports.search_voucher = function(req, res) {
     var date1 = req.body.date1;
     var date2 = req.body.date2;
     var plan_name = req.body.plan_name;
+    var user_id     = req.body.user_id;
     var nomor_transaction = req.body.nomor_transaction;
     let sql = 'SELECT *,DATE_FORMAT(created_at, "%d/%m/%Y") as date FROM tbl_transaction_detail where kode_voucher is not null ';
     if(date1 !== null && date2 !== null){
@@ -52,6 +53,7 @@ exports.search_voucher = function(req, res) {
     if(nomor_transaction !== ''){
         sql += ' and nomor_transaction = "' + nomor_transaction + '"'
     }
+    sql +='and id_user ='+user_id;
     connection.query(sql, function (error, rows, fields){
         if(error){
             console.log(error)
