@@ -106,6 +106,19 @@ exports.findTransaction = function(req, res) {
 exports.findTransactionId = function(req, res) {
     
     var id = req.params.id;
+    connection.query('SELECT *, FORMAT(price, 0) as harga FROM tbl_transaction_request where nomor_transaction = ?',
+    [ id ], 
+    function (error, rows, fields){
+        if(error){
+            console.log(error)
+        } else{
+            response.ok(rows, res)
+        }
+    });
+};
+exports.findTransactionIdDone = function(req, res) {
+    
+    var id = req.params.id;
     connection.query('SELECT *, FORMAT(price, 0) as harga FROM tbl_transaction_detail where nomor_transaction = ?',
     [ id ], 
     function (error, rows, fields){
@@ -116,7 +129,6 @@ exports.findTransactionId = function(req, res) {
         }
     });
 };
-
 exports.createTransaction = function(req, res) {
     var datetime            = new Date();
     var nomor_transaction   = 'TX-'+ Math.floor(new Date() / 1000);
@@ -125,6 +137,7 @@ exports.createTransaction = function(req, res) {
     var sub_total           = req.body.header.sub_total;
     var email           = req.body.header.email;
     var id_user             = req.body.header.id_user;
+    var lokasi             = req.body.header.lokasi;
     var status              = 'WAITING';
     var created_at          = datetime.toISOString().slice(0,10);
     var time                = datetime.toISOString().match(/(\d{2}:){2}\d{2}/)[0];

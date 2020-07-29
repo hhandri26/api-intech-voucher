@@ -106,6 +106,8 @@ module.exports = function(app) {
 
     app.route('/payment/detail/:id')
     .get(payment.findTransactionId);
+    app.route('/payment/detail_done/:id')
+    .get(payment.findTransactionIdDone);
 
     app.route('/payment/status_vucher')
     .put(paymentdetail.voucherStatus);
