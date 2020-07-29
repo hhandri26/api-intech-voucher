@@ -144,8 +144,8 @@ exports.createTransaction = function(req, res) {
 
     
 
-    connection.query('INSERT INTO tbl_transaction_header (nomor_transaction, qty,zona, sub_total, id_user, status, created_at,email,time) values (?,?,?,?,?,?,?,?,?)',
-    [ nomor_transaction, qty, zona,sub_total ,id_user ,status ,created_at,email,time ], 
+    connection.query('INSERT INTO tbl_transaction_header (nomor_transaction, qty,zona, sub_total, id_user, status, created_at,email,time,lokasi) values (?,?,?,?,?,?,?,?,?,?)',
+    [ nomor_transaction, qty, zona,sub_total ,id_user ,status ,created_at,email,time,lokasi ], 
     function (error, rows, fields){
         if(error){
             console.log(error)
@@ -158,8 +158,8 @@ exports.createTransaction = function(req, res) {
                 var d_sub_total = Number(d_qty) * Number(d_price);
 
                 
-                connection.query('INSERT INTO tbl_transaction_request (plan_name, price,qty,sub_total,created_at, status, id_user, nomor_transaction, zona) values (?,?,?,?,?,?,?,?,?)',
-                [ d_plan_name, d_price,d_qty,d_sub_total ,created_at ,status ,id_user,nomor_transaction,zona ], 
+                connection.query('INSERT INTO tbl_transaction_request (plan_name, price,qty,sub_total,created_at, status, id_user, nomor_transaction, zona,lokasi) values (?,?,?,?,?,?,?,?,?,?)',
+                [ d_plan_name, d_price,d_qty,d_sub_total ,created_at ,status ,id_user,nomor_transaction,zona,lokasi ], 
                 function (error, rows, fields){
                     if(error){
                         console.log(error)

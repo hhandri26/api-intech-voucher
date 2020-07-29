@@ -112,10 +112,11 @@ exports.createTransactionDetail = function(req, res) {
     var plan_name           = req.body.plan_name;
     var created_at          = datetime.toISOString().slice(0,10);
     var kode_voucher        = req.body.secret;
+    var lokasi              = req.body.lokasi;
     var time                = datetime.toISOString().match(/(\d{2}:){2}\d{2}/)[0];
 
-    connection.query('INSERT INTO tbl_transaction_detail (nomor_transaction,price, id_user, id_voucher, plan_name, created_at, kode_voucher,time) values (?,?,?,?,?,?,?,?)',
-    [ nomor_transaction, price, id_user,id_voucher  ,plan_name ,created_at,kode_voucher,time ], 
+    connection.query('INSERT INTO tbl_transaction_detail (nomor_transaction,price, id_user, id_voucher, plan_name, created_at, kode_voucher,time,lokasi) values (?,?,?,?,?,?,?,?,?)',
+    [ nomor_transaction, price, id_user,id_voucher  ,plan_name ,created_at,kode_voucher,time,lokasi ], 
     function (error, rows, fields){
         if(error){
             console.log(error)
