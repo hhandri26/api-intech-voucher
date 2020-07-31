@@ -42,6 +42,7 @@ exports.search_voucher = function(req, res) {
     var plan_name = req.body.plan_name;
     var user_id     = req.body.user_id;
     var nomor_transaction = req.body.nomor_transaction;
+    var lokasi_user = req.body.lokasi_user;
     let sql = 'SELECT *,DATE_FORMAT(created_at, "%d/%m/%Y") as date FROM tbl_transaction_detail where kode_voucher is not null ';
     if(date1 !== null && date2 !== null){
         sql += 'and (date(created_at) BETWEEN "'+date1+'" AND "'+date2+'")'
@@ -52,6 +53,9 @@ exports.search_voucher = function(req, res) {
     }
     if(nomor_transaction !== ''){
         sql += ' and nomor_transaction = "' + nomor_transaction + '"'
+    }
+    if(lokasi_user !== ''){
+        sql += ' and lokasi = "' + lokasi_user + '"'
     }
     sql +='and id_user ='+user_id;
     connection.query(sql, function (error, rows, fields){
