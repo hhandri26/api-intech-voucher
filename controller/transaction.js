@@ -279,6 +279,7 @@ exports.approveTransaction = function(req, res) {
               var mailOptions = {
                 from: 'voucher@intechmandiri.com',
                 to: email,
+                cc:'finance@intechmandiri.com,oscar@intechmandiri.com,basir@intechmandiri.com,teddy@intechmandiri.com',
                 subject: 'Topup Voucher Dengan Nomor Transaksi' + nomor_transaction +' Telah berhasil !',
                 text: 'Topup Voucher Dengan nomor transaksi  '+nomor_transaction +' Telah berhasil ! dengan nominal '+sub_total,
               };
@@ -325,7 +326,7 @@ exports.uploadTransaction = function(req, res) {
                 from: 'voucher@intechmandiri.com',
                 to: 'oscarosmu@gmail.com',
                 subject: 'Approve Top Up Voucher ' +nomor_transaction,
-                cc:'noc@intechmandiri.com,finance@intechmandiri.com',
+                cc:'noc@intechmandiri.com,oscar@intechmandiri.com,teddy@intechmandiri.com,basir@intechmandiri.com',
                 text: 'Approve top up voucher reseller '+ username +' dengan nomor Transkasi '+nomor_transaction +' Senilai Rp.'+harga
 
               };
