@@ -280,7 +280,7 @@ exports.approveTransaction = function(req, res) {
               var mailOptions = {
                 from: 'voucher@intechmandiri.com',
                 to: email,
-                cc:'finance@intechmandiri.com,oscar@intechmandiri.com,basir@intechmandiri.com',
+                cc:'finance@intechmandiri.com,oscar@intechmandiri.com,basir@intechmandiri.com,rezky.sepriansyah@intechmandiri.com',
                 subject: 'Topup Voucher Dengan Nomor Transaksi' + nomor_transaction +' Telah berhasil !',
                 text: 'Topup Voucher Dengan nomor transaksi  '+nomor_transaction +' Telah berhasil ! dengan nominal '+sub_total +' Di Lokasi '+location,
               };
