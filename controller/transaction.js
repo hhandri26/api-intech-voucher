@@ -44,7 +44,7 @@ var nodemailer = require('nodemailer');
 
 // manual
 exports.transaction = function(req, res) {
-    connection.query('SELECT a.*,DATE_FORMAT(a.created_at, "%d/%m/%Y") as date, FORMAT(a.sub_total, 0) as harga, b.username FROM tbl_transaction_header as a LEFT JOIN users as b ON a.id_user = b.id', function (error, rows, fields){
+    connection.query('SELECT a.*,DATE_FORMAT(a.created_at, "%d/%m/%Y") as date, FORMAT(a.sub_total, 0) as harga, b.username,c.username as approved_by FROM tbl_transaction_header as a LEFT JOIN users as b ON a.id_user = b.id LEFT JOIN users as c ON a.user_approved = c.id order by a.created_at DESC', function (error, rows, fields){
         if(error){
             console.log(error)
         } else{
@@ -71,7 +71,7 @@ exports.report = function(req, res) {
     var zona = req.body.zona;
     var status = req.body.status;
    
-    let sql = 'SELECT a.*,DATE_FORMAT(a.created_at, "%d/%m/%Y") as date,b.username,FORMAT(a.sub_total, 0) as harga FROM tbl_transaction_header as a LEFT JOIN users as b ON a.id_user = b.id where a.nomor_transaction is not null ';
+    let sql = 'SELECT a.*,DATE_FORMAT(a.created_at, "%d/%m/%Y") as date,b.username,FORMAT(a.sub_total, 0) as harga,c.username as approved_by FROM tbl_transaction_header as a LEFT JOIN users as b ON a.id_user = b.id LEFT JOIN users as c ON a.user_approved = c.id where a.nomor_transaction is not null ';
     if(date1 !== null && date2 !== null){
         sql += 'and (date(a.created_at) BETWEEN "'+date1+'" AND "'+date2+'")'
 
@@ -86,6 +86,7 @@ exports.report = function(req, res) {
     if(status !== ''){
         sql += ' and a.status = "' + status +'"'
     }
+    sql +=' order by a.created_at DESC'
     connection.query(sql, function (error, rows, fields){
         if(error){
             console.log(error)
