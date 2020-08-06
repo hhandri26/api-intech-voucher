@@ -278,6 +278,7 @@ exports.approveTransaction = function(req, res) {
             }else if(status =='REJECT'){
                 subject = 'Topup Voucher Dengan Nomor Transaksi' + nomor_transaction +' Di Tolak !';
                 text = 'Topup Voucher Dengan nomor transaksi  '+nomor_transaction +' Telah Di Tolak ! dengan nominal '+sub_total +' Di Lokasi '+location;
+                
                 cc='oscar@intechmandiri.com'
                 
 
