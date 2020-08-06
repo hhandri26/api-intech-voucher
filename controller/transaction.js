@@ -44,7 +44,7 @@ var nodemailer = require('nodemailer');
 
 // manual
 exports.transaction = function(req, res) {
-    connection.query('SELECT a.*,DATE_FORMAT(a.created_at, "%d/%m/%Y") as date, FORMAT(a.sub_total, 0) as harga, b.username,IF(a.lokasi IS NULL or a.lokasi = "", "empty", a.lokasi) as lok,IF(c.username IS NULL or c.username = "", "empty", c.username) as approved_by FROM tbl_transaction_header as a LEFT JOIN users as b ON a.id_user = b.id LEFT JOIN users as c ON a.user_approved = c.id order by a.created_at DESC', function (error, rows, fields){
+    connection.query('SELECT a.*,DATE_FORMAT(a.created_at, "%d/%m/%Y") as date, FORMAT(a.sub_total, 0) as harga, b.username,IF(a.lokasi IS NULL or a.lokasi = "", "empty", a.lokasi) as lok,IF(c.username IS NULL or c.username = "", "empty", c.username) as approved_by FROM tbl_transaction_header as a LEFT JOIN users as b ON a.id_user = b.id LEFT JOIN users as c ON a.user_approved = c.id where a.status NOT IN ("REJECT","UPLOAD") order by a.created_at DESC ', function (error, rows, fields){
         if(error){
             console.log(error)
         } else{
@@ -86,7 +86,7 @@ exports.report = function(req, res) {
     if(status !== ''){
         sql += ' and a.status = "' + status +'"'
     }
-    sql +=' order by a.created_at DESC'
+    sql +=' and a.status NOT IN ("REJECT","UPLOAD") order by a.created_at DESC'
     connection.query(sql, function (error, rows, fields){
         if(error){
             console.log(error)
@@ -265,7 +265,26 @@ exports.approveTransaction = function(req, res) {
         if(error){
             console.log(error)
         } else{
+
             if(status!=='PAID'){
+            var subject ='';
+            var text = '';
+            var cc = '';
+            if(status == 'APPROVED' || status == 'PO'){
+                subject = 'Topup Voucher Dengan Nomor Transaksi' + nomor_transaction +' Telah berhasil !';
+                text = 'Topup Voucher Dengan nomor transaksi  '+nomor_transaction +' Telah berhasil ! dengan nominal '+sub_total +' Di Lokasi '+location;
+                cc ='finance@intechmandiri.com,oscar@intechmandiri.com,basir@intechmandiri.com,rezky.sepriansyah@intechmandiri.com';
+               
+            }else if(status =='REJECT'){
+                subject = 'Topup Voucher Dengan Nomor Transaksi' + nomor_transaction +' Di Tolak !';
+                text = 'Topup Voucher Dengan nomor transaksi  '+nomor_transaction +' Telah Di Tolak ! dengan nominal '+sub_total +' Di Lokasi '+location;
+                cc='handri@intechmandiri.com'
+                
+
+            }
+
+            console.log(subject,text,cc);
+            
                   // send email
             var transporter = nodemailer.createTransport({
                 //service: 'gmail',
@@ -281,9 +300,9 @@ exports.approveTransaction = function(req, res) {
               var mailOptions = {
                 from: 'voucher@intechmandiri.com',
                 to: email,
-                cc:'finance@intechmandiri.com,oscar@intechmandiri.com,basir@intechmandiri.com,rezky.sepriansyah@intechmandiri.com',
-                subject: 'Topup Voucher Dengan Nomor Transaksi' + nomor_transaction +' Telah berhasil !',
-                text: 'Topup Voucher Dengan nomor transaksi  '+nomor_transaction +' Telah berhasil ! dengan nominal '+sub_total +' Di Lokasi '+location,
+                cc:cc,
+                subject:subject,
+                text: text,
               };
               
               transporter.sendMail(mailOptions, function(error, info){
@@ -331,7 +350,7 @@ exports.uploadTransaction = function(req, res) {
                 from: 'voucher@intechmandiri.com',
                 to: 'oscarosmu@gmail.com',
                 subject: 'Approve Top Up Voucher ' +nomor_transaction,
-                cc:'noc@intechmandiri.com,oscar@intechmandiri.com,basir@intechmandiri.com',
+                cc:'handrisaeputa2@gmail.com',
                 text: 'Approve top up voucher reseller '+ username +' dengan nomor Transkasi '+nomor_transaction +' Senilai Rp.'+harga
 
               };
