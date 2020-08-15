@@ -329,6 +329,7 @@ exports.uploadTransaction = function(req, res) {
     var nomor_transaction = req.body.nomor_transaction;
     var harga            = req.body.harga;
     var username        = req.body.username;
+    var lokasi =  req.body.lokasi;
     var status = 'UPLOAD';
 
     connection.query('UPDATE tbl_transaction_header SET bukti_transfer = ?, status = ? WHERE id = ?',
@@ -351,8 +352,8 @@ exports.uploadTransaction = function(req, res) {
                 from: 'voucher@intechmandiri.com',
                 to: 'oscarosmu@gmail.com',
                 subject: 'Approve Top Up Voucher ' +nomor_transaction,
-                cc:'handrisaeputa2@gmail.com',
-                text: 'Approve top up voucher reseller '+ username +' dengan nomor Transkasi '+nomor_transaction +' Senilai Rp.'+harga
+                cc:'noc@intechmandiri.com',
+                text: 'Approve top up voucher reseller '+ username +' dengan nomor Transkasi '+nomor_transaction +' Senilai Rp.'+harga +' Lokasi '+lokasi
 
               };
             transporter.sendMail(mailOptions2, function(error, info){

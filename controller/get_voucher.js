@@ -28,8 +28,9 @@ exports.reportArea= function(req, res) {
 exports.voucher= function(req, res) {
     var plan_name = req.body.plan_name;
     var qty    =  req.body.qty;
-    connection.query('SELECT id, price,secret,plan_name FROM tbl_vouchers where expired_on is NULL and user_buy is NULL and plan_name = ? order by id ASC LIMIT ?',
-    [plan_name, qty], 
+    var owner_name = req.body.owner_name;
+    connection.query('SELECT id, price,secret,plan_name FROM tbl_vouchers where expired_on is NULL and user_buy is NULL and plan_name = ? and owner_name = ? order by id ASC LIMIT ?',
+    [plan_name,owner_name,qty], 
     function (error, rows, fields){
         if(error){
             console.log(error)
