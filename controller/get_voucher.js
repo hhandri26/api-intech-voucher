@@ -41,7 +41,7 @@ exports.voucher= function(req, res) {
 };
 
 exports.Remainingvoucher= function(req, res) {
-    connection.query('select count(id) as sisa, plan_name,price,owner_name from mixradius_radDB.tbl_vouchers where user_buy is null  group by plan_name;', 
+    connection.query('select count(id) as sisa, plan_name,price,owner_name from mixradius_radDB.tbl_vouchers where user_buy is null  group by plan_name, owner_name;', 
     function (error, rows, fields){
         if(error){
             console.log(error)
