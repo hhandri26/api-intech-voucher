@@ -99,7 +99,7 @@ exports.report = function(req, res) {
 exports.findTransaction = function(req, res) {
     
     var id = req.params.id;
-    connection.query('SELECT *,DATE_FORMAT(created_at, "%d/%m/%Y") as date, FORMAT(sub_total, 0) as harga FROM tbl_transaction_header where id_user = ?',
+    connection.query('SELECT *,DATE_FORMAT(created_at, "%d/%m/%Y") as date, FORMAT(sub_total, 0) as harga FROM tbl_transaction_header where id_user = ? order by created_at desc',
     [ id ], 
     function (error, rows, fields){
         if(error){
