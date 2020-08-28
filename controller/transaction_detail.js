@@ -78,7 +78,7 @@ exports.voucher_nomor_transaction = function(req, res) {
 };
 exports.voucherAll = function(req, res) {
     var id = req.params.id;
-    connection.query('SELECT a.*,DATE_FORMAT(a.created_at, "%d/%m/%Y") as date,IF(a.lokasi IS NULL or a.lokasi = "", "empty", a.lokasi) as lok,FORMAT(a.price, 0) as harga, b.username as reseller FROM tbl_transaction_detail as a LEFT JOIN users as b ON a.id_user = b.id ', function (error, rows, fields){
+    connection.query('SELECT a.*,DATE_FORMAT(a.created_at, "%d/%m/%Y") as date,IF(a.lokasi IS NULL or a.lokasi = "", "empty", a.lokasi) as lok,FORMAT(a.price, 0) as harga, b.username as reseller FROM tbl_transaction_detail as a LEFT JOIN users as b ON a.id_user = b.id order by created_at DESC', function (error, rows, fields){
         if(error){
             console.log(error)
         } else{
