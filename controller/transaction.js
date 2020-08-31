@@ -55,7 +55,7 @@ exports.transaction = function(req, res) {
 
 exports.finance = function(req, res) {
     var status = "'APPROVED'";
-    connection.query('SELECT a.*,DATE_FORMAT(a.created_at, "%d/%m/%Y") as date, FORMAT(a.sub_total, 0) as harga, b.username FROM tbl_transaction_header as a LEFT JOIN users as b ON a.id_user = b.id where a.status <> '+status, function (error, rows, fields){
+    connection.query('SELECT a.*,DATE_FORMAT(a.created_at, "%d/%m/%Y") as date, FORMAT(a.sub_total, 0) as harga, b.username FROM tbl_transaction_header as a LEFT JOIN users as b ON a.id_user = b.id where a.status <> '+status+' order by created_at DESC', function (error, rows, fields){
         if(error){
             console.log(error)
         } else{
