@@ -182,7 +182,7 @@ exports.createTransaction = function(req, res) {
                 secure: true, // true for 465, false for other ports
                 auth: {
                   user: 'voucher@intechmandiri.com',
-                  pass: 'Intech@2020'
+                  pass: 'Intech@Voucher2020'
                 }
               });
               
@@ -294,7 +294,7 @@ exports.approveTransaction = function(req, res) {
                 secure: true, // true for 465, false for other ports
                 auth: {
                   user: 'voucher@intechmandiri.com',
-                  pass: 'Intech@2020'
+                  pass: 'Intech@Voucher2020'
                 }
               });
               
@@ -345,7 +345,7 @@ exports.uploadTransaction = function(req, res) {
                 secure: true, // true for 465, false for other ports
                 auth: {
                   user: 'voucher@intechmandiri.com',
-                  pass: 'Intech@2020'
+                  pass: 'Intech@Voucher2020'
                 }
               });
             var mailOptions2 = {
