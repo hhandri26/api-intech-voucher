@@ -6,6 +6,7 @@ var connection_voucher = require('../connection/conn_voucher');
 const request = require('request');
 var md5 = require('md5');
 var nodemailer = require('nodemailer');
+const con = require('../connection/conn');
 // duitku
 // exports.index= function(req, res) {
 //     var price = req.body.price;
@@ -258,9 +259,20 @@ exports.approveTransaction = function(req, res) {
     var sub_total       = req.body.sub_total;
     var get_voucher     = 1;
     var location        = req.body.lokasi;
+    var created_at      = req.body.created_at;
+     var date = '';
+     if(status == 'PAID'){
+         date = created_at;
 
-    connection.query('UPDATE tbl_transaction_header SET user_approved = ?, status = ?,updated_at = ?,get_voucher =? WHERE id = ?',
-    [ user_approved, status, updated_at,get_voucher,id], 
+     }else{
+         date = updated_at;
+
+     }
+
+    // console.log(date);
+
+    connection.query('UPDATE tbl_transaction_header SET user_approved = ?, status = ?,created_at = ?,get_voucher =? WHERE id = ?',
+    [ user_approved, status, date,get_voucher,id], 
     function (error, rows, fields){
         if(error){
             console.log(error)
