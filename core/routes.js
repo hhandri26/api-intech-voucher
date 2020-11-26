@@ -7,6 +7,7 @@ module.exports = function(app) {
     var paymentdetail = require('../controller/transaction_detail');
     var voucher = require('../controller/get_voucher');
     var user_lokasi = require('../controller/user_lokasi');
+    var whatsapp = require('../controller/whatsapp');
 
 
     app.route('/')
@@ -137,6 +138,11 @@ module.exports = function(app) {
     .get(user_lokasi.index);
     app.route('/user/lokasi')
     .post(user_lokasi.save);
+
+    // whatsapp
+
+    app.route('/whatsapp/send_message')
+    .post(whatsapp.sendWhatsapp);
 
 
 
