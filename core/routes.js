@@ -94,6 +94,9 @@ module.exports = function(app) {
     app.route('/voucher_done/:id')
     .get(paymentdetail.voucher);
 
+    app.route('/voucher_limit/:id')
+    .get(paymentdetail.voucher_limit);
+
     app.route('/voucher_no_transaction/:id')
     .get(paymentdetail.voucher_nomor_transaction);
     app.route('/voucher_plan_name/:id')
