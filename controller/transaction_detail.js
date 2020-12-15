@@ -153,7 +153,7 @@ exports.voucherStatus = function(req, res) {
 exports.voucher_limit = function(req, res) {
     var id = req.params.id;
     var status = "'DONE'";
-    connection.query('SELECT * , DATE_FORMAT(created_at, "%d/%m/%Y") as date, FORMAT(price, 0) as harga FROM tbl_transaction_detail  where status <> '+status+' and id_user = ? order by created_at DESC LIMIT 1000',[id], function (error, rows, fields){
+    connection.query('SELECT * , DATE_FORMAT(created_at, "%d/%m/%Y") as date, FORMAT(price, 0) as harga FROM tbl_transaction_detail  where status <> '+status+' and id_user = ? order by created_at DESC LIMIT 100',[id], function (error, rows, fields){
         if(error){
             console.log(error)
         } else{
