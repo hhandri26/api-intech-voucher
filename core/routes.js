@@ -147,6 +147,12 @@ module.exports = function(app) {
     app.route('/whatsapp/send_message')
     .post(whatsapp.sendWhatsapp);
 
+    // total penjualan
+
+    app.route('/transaction/count_total')
+    .get(payment.count_total);
+
+
 
 
 

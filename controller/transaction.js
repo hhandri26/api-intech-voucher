@@ -45,7 +45,7 @@ const con = require('../connection/conn');
 
 // manual
 exports.transaction = function(req, res) {
-    connection.query('SELECT a.*,DATE_FORMAT(a.created_at, "%d/%m/%Y") as date, FORMAT(a.sub_total, 0) as harga, b.username,IF(a.lokasi IS NULL or a.lokasi = "", "empty", a.lokasi) as lok,IF(c.username IS NULL or c.username = "", "empty", c.username) as approved_by FROM tbl_transaction_header as a LEFT JOIN users as b ON a.id_user = b.id LEFT JOIN users as c ON a.user_approved = c.id where a.status NOT IN ("REJECT","UPLOAD","WAITING") order by a.created_at DESC ', function (error, rows, fields){
+    connection.query('SELECT a.*,DATE_FORMAT(a.created_at, "%d/%m/%Y") as date, FORMAT(a.sub_total, 0) as harga, b.username,IF(a.lokasi IS NULL or a.lokasi = "", "empty", a.lokasi) as lok,IF(c.username IS NULL or c.username = "", "empty", c.username) as approved_by FROM tbl_transaction_header as a LEFT JOIN users as b ON a.id_user = b.id LEFT JOIN users as c ON a.user_approved = c.id where a.status NOT IN ("REJECT","UPLOAD","WAITING") order by a.created_at DESC LIMIT 100 ', function (error, rows, fields){
         if(error){
             console.log(error)
         } else{
@@ -56,7 +56,7 @@ exports.transaction = function(req, res) {
 
 exports.finance = function(req, res) {
     var status = "'APPROVED'";
-    connection.query('SELECT a.*,DATE_FORMAT(a.created_at, "%d/%m/%Y") as date, FORMAT(a.sub_total, 0) as harga, b.username FROM tbl_transaction_header as a LEFT JOIN users as b ON a.id_user = b.id where a.status <> '+status+' order by created_at DESC', function (error, rows, fields){
+    connection.query('SELECT a.*,DATE_FORMAT(a.created_at, "%d/%m/%Y") as date, FORMAT(a.sub_total, 0) as harga, b.username FROM tbl_transaction_header as a LEFT JOIN users as b ON a.id_user = b.id where a.status <> '+status+' order by created_at DESC LIMIT 100', function (error, rows, fields){
         if(error){
             console.log(error)
         } else{
@@ -429,6 +429,17 @@ exports.CountVoucher = function(req, res) {
     var id = req.params.id;
     connection.query('SELECT COUNT(id) as total FROM tbl_transaction_detail where id_user = ?',
     [ id ], 
+    function (error, rows, fields){
+        if(error){
+            console.log(error)
+        } else{
+            response.ok(rows, res)
+        }
+    });
+};
+
+exports.count_total = function(req, res) {
+    connection.query('SELECT sum(sub_total) as total FROM tbl_transaction_header', 
     function (error, rows, fields){
         if(error){
             console.log(error)
